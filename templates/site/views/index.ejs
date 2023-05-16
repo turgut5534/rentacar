@@ -35,28 +35,28 @@
 		          		<h2>Make your trip</h2>
 						  <div class="form-group">
 							<label for="" class="label">Pick-up location</label>
-							<input name="pickup" type="text" class="form-control" id="pickUpInput" placeholder="City, Airport, Station, etc" oninput="filterLocations(this.value, 'pickUpInput', 'pickUpLocationSuggestions')">
-							<ul id="pickUpLocationSuggestions" class="location-suggestions"></ul>
+							<input required autocomplete="off" name="pickup" type="text" class="form-control" id="pickUpInput" placeholder="City, Airport, Station, etc" oninput="filterLocations(this.value, 'pickUpInput', 'pickUpLocationSuggestions')">
+							<ul style="list-style: none;" id="pickUpLocationSuggestions" class="location-suggestions text-light"></ul>
 						  </div>
 						  
 						  <div class="form-group">
 							<label for="" class="label">Drop-off location</label>
-							<input name="dropoff" type="text" class="form-control" placeholder="City, Airport, Station, etc" id="dropOffInput" oninput="filterLocations(this.value, 'dropOffInput', 'dropOffLocationSuggestions')">
-							<ul id="dropOffLocationSuggestions" class="location-suggestions"></ul>
+							<input required autocomplete="off" name="dropoff" type="text" class="form-control" placeholder="City, Airport, Station, etc" id="dropOffInput" oninput="filterLocations(this.value, 'dropOffInput', 'dropOffLocationSuggestions')">
+							<ul style="list-style: none;"  id="dropOffLocationSuggestions" class="location-suggestions text-light"></ul>
 						  </div>
 			    				<div class="d-flex">
 			    					<div class="form-group mr-2">
 			                <label for="" class="label">Pick-up date</label>
-			                <input name="pickup_date" type="text" class="form-control" id="book_pick_date" placeholder="Date">
+			                <input required name="pickup_date" type="text" class="form-control" id="book_pick_date" placeholder="Date">
 			              </div>
 			              <div class="form-group ml-2">
 			                <label for="" class="label">Drop-off date</label>
-			                <input name="dropoff_date" type="text" class="form-control" id="book_off_date" placeholder="Date">
+			                <input required name="dropoff_date" type="text" class="form-control" id="book_off_date" placeholder="Date">
 			              </div>
 		              </div>
 		              <div class="form-group">
 		                <label for="" class="label">Pick-up time</label>
-		                <input type="text" class="form-control" id="time_pick" placeholder="Time">
+		                <input required type="text" class="form-control" id="time_pick" placeholder="Time">
 		              </div>
 			            <div class="form-group">
 			              <input type="submit" value="Rent A Car Now" class="btn btn-secondary py-3 px-4">
@@ -106,68 +106,30 @@
     		<div class="row justify-content-center">
           <div class="col-md-12 heading-section text-center ftco-animate mb-5">
           	<span class="subheading">What we offer</span>
-            <h2 class="mb-2">Feeatured Vehicles</h2>
+            <h2 class="mb-2">Featured Vehicles</h2>
           </div>
         </div>
     		<div class="row">
     			<div class="col-md-12">
     				<div class="carousel-car owl-carousel">
+
+						<% cars.forEach((car) => { %>
     					<div class="item">
     						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(/img/car-1.jpg);">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url(/cars/<%=car.image%>);">
 		    					</div>
 		    					<div class="text">
-		    						<h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
+		    						<h2 class="mb-0"><a href="#"><%=car.brand.name%> <%=car.model%></a></h2>
 		    						<div class="d-flex mb-3">
-			    						<span class="cat">Cheverolet</span>
-			    						<p class="price ml-auto">$500 <span>/day</span></p>
+			    						<span class="cat"><%=car.brand.name%></span>
+			    						<p class="price ml-auto">$<%=car.price%> <span>/day</span></p>
 		    						</div>
-		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+		    						<p class="d-flex mb-0 d-block"><a href="/cars/<%=car.slug%>" class="btn btn-primary py-2 mr-1">Book now</a> <a href="/cars/<%=car.slug%>" class="btn btn-secondary py-2 ml-1">Details</a></p>
 		    					</div>
 		    				</div>
     					</div>
-    					<div class="item">
-    						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(/img/car-2.jpg);">
-		    					</div>
-		    					<div class="text">
-		    						<h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-		    						<div class="d-flex mb-3">
-			    						<span class="cat">Cheverolet</span>
-			    						<p class="price ml-auto">$500 <span>/day</span></p>
-		    						</div>
-		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-		    					</div>
-		    				</div>
-    					</div>
-    					<div class="item">
-    						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(/img/car-3.jpg);">
-		    					</div>
-		    					<div class="text">
-		    						<h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-		    						<div class="d-flex mb-3">
-			    						<span class="cat">Cheverolet</span>
-			    						<p class="price ml-auto">$500 <span>/day</span></p>
-		    						</div>
-		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-		    					</div>
-		    				</div>
-    					</div>
-    					<div class="item">
-    						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(/img/car-4.jpg);">
-		    					</div>
-		    					<div class="text">
-		    						<h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-		    						<div class="d-flex mb-3">
-			    						<span class="cat">Cheverolet</span>
-			    						<p class="price ml-auto">$500 <span>/day</span></p>
-		    						</div>
-		    						<p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-		    					</div>
-		    				</div>
-    					</div>
+						<%})%>
+    		
     				</div>
     			</div>
     		</div>
@@ -452,6 +414,7 @@
 		// Clear location suggestions
 		locationSuggestions.innerHTML = '';
 		}
+
 	  </script>
 	  
 

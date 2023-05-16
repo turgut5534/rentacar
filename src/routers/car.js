@@ -3,6 +3,7 @@ const router = new express.Router()
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const email = require('../utils/email')
 const { Op } = require('sequelize');
 
 const Customer = require('../models/customer')
@@ -21,7 +22,16 @@ router.get('/', async(req,res) => {
         
         const locations = await Location.findAll()
 
-        res.render('site/views/index', {locations})
+        const cars = await Car.findAll({
+            include: [
+                {
+                    model: Brand
+                }
+            ],
+            limit:6
+        })
+
+        res.render('site/views/index', {locations, cars})
 
     } catch(e) {
         console.log(e)
@@ -209,6 +219,38 @@ router.get('/search', async(req,res) => {
 
     } catch(e) {
         console.log(e)
+    }
+
+})
+
+router.post('/contact', async(req,res) => {
+
+    const {name,email,subject,message} = req.body
+
+    if(!name || !email || !subject || !message) {
+        return res.status(400).json({
+            status: false,
+            message: 'Please fill up all fields...'
+        })
+    }
+
+    const newMessage = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_TO,
+        subject: 'A New Message From A Customer',
+        text: req.body.message,
+        html: `<p><b>From:</b> ${name}</p>
+        <p><b>Email</b>: ${email}</p>
+        <p><b>Subject</b>: ${subject}</p>
+        <p><b>Message</b>: ${message}</p>`
+      };
+
+    try {
+        await email.sendMail(newMessage)
+        res.status(200).send()
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
     }
 
 })
