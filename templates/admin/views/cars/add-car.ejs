@@ -1,0 +1,166 @@
+<%- include('../../partials/head' , { title: 'Add Car' }) %>
+<%- include('../../partials/sidebar') %>
+<%- include('../../partials/header') %>
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="row align-items-center mb-3">
+            <div class="col-6">
+                <div class="h2">
+                    Add Car
+                </div>
+            </div>
+        </div>
+        <form action="/admin/cars/save" method="POST" class="blog-form" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Image:</label>
+                <input type="file" id="image" name="image" class="form-control" required>
+            </div>
+
+            <% if(locations.length) { %>
+                <div class="mb-3">
+                    <label class="form-label" for="">Location</label>
+                    <select name="locationId" id="" class="form-control">
+                        <% locations.forEach((location) => {%>
+                            <option value="<%=location.id%>"><%=location.name%></option>
+                        <%})%>
+                    </select>
+                </div>
+            <% } %>
+
+            <% if(brands.length) { %>
+                <div class="mb-3">
+                    <label class="form-label" for="">Brand</label>
+                    <select name="brandId" id="" class="form-control">
+                        <% brands.forEach((brand) => {%>
+                            <option value="<%=brand.id%>"><%=brand.name%></option>
+                        <%})%>
+                    </select>
+                </div>
+            <% } %>
+            
+            <div class="mb-3">
+                <label for="title" class="form-label">Model:</label>
+                <input type="text" id="title" name="model" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Type:</label>
+                <select name="type" class="form-control" required>
+                    <option value="Economy">Economy</option>
+                    <option value="Compact">Compact</option>
+                    <option value="Mid-Size">Mid-Size</option>
+                    <option value="Full-Size">Full-Size</option>
+                    <option value="Luxury ">Luxury</option>
+                    <option value="SUVs">SUVs</option>
+                    <option value="Minivan">Minivan</option>
+                    <option value="Convertible">Convertible</option>
+                    <option value="Sport">Sport</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Year:</label>
+                <select name="year" id="" class="form-control" required>
+                    <% for (let i = new Date().getFullYear(); i >= 160; i--) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% } %>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Color:</label>
+                <select name="color" class="form-control" required>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="black">Black</option>
+                    <option value="white">White</option>
+                    <option value="gray">Gray</option>
+                    <option value="silver">Silver</option>
+                </select>
+                  
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">$ Price:</label>
+                <input type="number" id="title" name="price" class="form-control" required>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Plate:</label>
+                <input type="text" id="title" name="plate" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Transmission:</label>
+                <select name="transmission" id="" class="form-control" required>
+                    <option value="Automatic">Automatic</option>
+                    <option value="Manual">Manual</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Milage:</label>
+                <input type="text" id="title" name="mileage" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Seat:</label>
+                <select name="seat" id="" class="form-control">
+                    <% for (let i = 1; i <= 10; i++) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                      <% } %>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Fuel:</label>
+                <select name="fuel" id="" class="form-control">
+                    <option value="Gas">Gas</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="LPG">LPG</option>
+                    <option value="Electricity">Electricity</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="title" class="form-label">Lugguage:</label>
+                <select name="lugguage" id="" class="form-control">
+                    <% for (let i = 1; i <= 10; i++) { %>
+                       <option value="<%= i %> Bags"><%= i %> Bags</option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Description:</label>
+                <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="" class="form-label mb-2">Features</label>
+                <div class="row">
+                    <% carfeatures.forEach(function(feature) { %>
+                        <div class="col-3 mb-2">
+                            <input type="checkbox" id="<%= feature.id %>" name="features" value="<%= feature.id %>">
+                            <label style="text-transform: capitalize" for="<%= feature.id %>"><%= feature.name %></label>
+                        </div>
+                    <%})%>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Add Car</button>
+            </div>
+
+        </form>
+
+    </div>
+</main>
+
+<%- include('../../partials/footer') %>

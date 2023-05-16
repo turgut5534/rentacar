@@ -1,0 +1,226 @@
+<%- include('../../partials/head' , { title: 'Edit Car' }) %>
+    <%- include('../../partials/sidebar') %>
+        <%- include('../../partials/header') %>
+
+            <main class="content">
+                <div class="container-fluid p-0">
+
+                    <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                            <div class="h2">
+                                Edit Car
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12 col-lg-3">
+
+                            <div class="mb-3">
+                                <img class="car-image" src="/cars/<%=car.image%>" alt="">
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-lg-9">
+                            <form action="/admin/cars/update" method="POST" class="blog-form"
+                                enctype="multipart/form-data">
+
+                                <input type="hidden" name="id" value="<%=car.id%>">
+
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image:</label>
+                                    <input type="file" id="image" name="image" class="form-control">
+                                </div>
+
+                                <% if(locations.length) { %>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="">Location</label>
+                                        <select name="locationId" id="" class="form-control">
+                                            <% locations.forEach((location)=> {%>
+                                                <option <% if(car.location.id==location.id) { %> selected <%}%> value="
+                                                        <%=location.id%>"><%=location.name%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                    <% } %>
+
+                                        <% if(brands.length) { %>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="">Brand</label>
+                                                <select name="brandId" id="" class="form-control">
+                                                    <% brands.forEach((brand)=> {%>
+                                                        <option <% if(car.brand.id==brand.id) { %> selected <%}%>
+                                                                value="<%=brand.id%>"><%=brand.name%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+                                            <% } %>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Model:</label>
+                                                    <input type="text" id="title" name="model" class="form-control"
+                                                        required value="<%=car.model%>">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Type:</label>
+                                                    <select name="type" class="form-control" required>
+                                                        <option <% if(car.type=='Economy' ) { %> selected <%}%>
+                                                                value="Economy">Economy</option>
+                                                        <option <% if(car.type=='Compact' ) { %> selected <%}%>
+                                                                value="Compact">Compact</option>
+                                                        <option <% if(car.type=='Mid-Size' ) { %> selected <%}%>
+                                                                value="Mid-Size">Mid-Size</option>
+                                                        <option <% if(car.type=='Full-Size' ) { %> selected <%}%>
+                                                                value="Full-Size">Full-Size</option>
+                                                        <option <% if(car.type=='Luxury' ) { %> selected <%}%>
+                                                                value="Luxury ">Luxury</option>
+                                                        <option <% if(car.type=='SUVs' ) { %> selected <%}%>
+                                                                value="SUVs">SUVs</option>
+                                                        <option <% if(car.type=='Minivan' ) { %> selected <%}%>
+                                                                value="Minivan">Minivan</option>
+                                                        <option <% if(car.type=='Convertible' ) { %> selected <%}%>
+                                                                value="Convertible">Convertible</option>
+                                                        <option <% if(car.type=='Sport' ) { %> selected <%}%>
+                                                                value="Sport">Sport</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Year:</label>
+                                                    <select name="year" id="" class="form-control" required>
+                                                        <% for (let i=1960; i <=new Date().getFullYear(); i++) { %>
+                                                            <option <% if(car.year==i) { %> selected <%}%> value="<%= i
+                                                                        %>"><%= i %>
+                                                            </option>
+                                                            <% } %>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Color:</label>
+                                                    <select name="color" class="form-control" required>
+                                                        <option <% if(car.color=='red' ) { %> selected <%}%>
+                                                                value="red">Red</option>
+                                                        <option <% if(car.color=='blue' ) { %> selected <%}%>
+                                                                value="blue">Blue</option>
+                                                        <option <% if(car.color=='green' ) { %> selected <%}%>
+                                                                value="green">Green</option>
+                                                        <option <% if(car.color=='yellow' ) { %> selected <%}%>
+                                                                value="yellow">Yellow</option>
+                                                        <option <% if(car.color=='black' ) { %> selected <%}%>
+                                                                value="black">Black</option>
+                                                        <option <% if(car.color=='white' ) { %> selected <%}%>
+                                                                value="white">White</option>
+                                                        <option <% if(car.color=='gray' ) { %> selected <%}%>
+                                                                value="gray">Gray</option>
+                                                        <option <% if(car.color=='silver' ) { %> selected <%}%>
+                                                                value="silver">Silver</option>
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">$ Price:</label>
+                                                    <input type="number" id="title" name="price" class="form-control"
+                                                        required value="<%=car.price%>">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Plate:</label>
+                                                    <input type="text" id="title" name="plate" class="form-control"
+                                                        required value="<%= car.plate %>">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Transmission:</label>
+                                                    <select name="transmission" id="" class="form-control" required>
+                                                        <option <% if(car.transmission=='Automatic' ) { %> selected
+                                                            <%}%> value="Automatic">Automatic
+                                                        </option>
+                                                        <option <% if(car.transmission=='Manual' ) { %> selected <%}%>
+                                                                value="Manual">Manual</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Milage:</label>
+                                                    <input type="text" id="title" name="mileage" class="form-control"
+                                                        required value="<%= car.mileage %>">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Seat:</label>
+                                                    <select name="seat" id="" class="form-control">
+                                                        <% for (let i=1; i <=10; i++) { %>
+                                                            <option <% if(car.seat==i ) { %> selected <%}%> value="<%= i
+                                                                        %>"><%= i %>
+                                                            </option>
+                                                            <% } %>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Fuel:</label>
+                                                    <select name="fuel" id="" class="form-control">
+                                                        <option <% if(car.fuel=='Gas' ) { %> selected <%}%>
+                                                                value="Gas">Gas</option>
+                                                        <option <% if(car.fuel=='Petrol' ) { %> selected <%}%>
+                                                                value="Petrol">Petrol</option>
+                                                        <option <% if(car.fuel=='LPG' ) { %> selected <%}%>
+                                                                value="LPG">LPG</option>
+                                                        <option <% if(car.fuel=='Electricity' ) { %> selected <%}%>
+                                                                value="Electricity">Electricity</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Lugguage:</label>
+                                                    <select name="lugguage" id="" class="form-control">
+                                                        <% for (let i=1; i <=10; i++) { %>
+                                                            <option <% if(car.lugguage==i ) { %> selected <%}%> value="
+                                                                    <%= i %> Bags"><%= i %> Bags</option>
+                                                            <% } %>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Description:</label>
+                                                    <textarea class="form-control" name="description" id="" cols="30"
+                                                        rows="10"><%= car.description %></textarea>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="" class="form-label mb-2">Features</label>
+                                                    <div class="row">
+                                                        <% features.forEach(function(feature) { %>
+                                                            <% let checked = car.CarFeatures.some(cat => cat.featureId === feature.id) %>
+                                                            <div class="col-3 mb-2">
+                                                                <input type="checkbox" id="<%= feature.id %>"
+                                                                    name="features" <% if(checked) {%> checked <%}%> value="<%=feature.id %>">
+                                                                <label style="text-transform: capitalize"
+                                                                    for="<%= feature.id %>">
+                                                                    <%= feature.name %>
+                                                                </label>
+                                                            </div>
+                                                        <%})%>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <button type="submit" class="btn btn-primary">Update Car</button>
+                                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </main>
+
+            <%- include('../../partials/footer') %>
