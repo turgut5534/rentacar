@@ -31,24 +31,27 @@
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
 	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form action="#" class="request-form ftco-animate bg-primary">
+	  						<form action="/search" class="request-form ftco-animate bg-primary">
 		          		<h2>Make your trip</h2>
-			    				<div class="form-group">
-			    					<label for="" class="label">Pick-up location</label>
-			    					<input type="text" class="form-control" placeholder="City, Airport, Station, etc">
-			    				</div>
-			    				<div class="form-group">
-			    					<label for="" class="label">Drop-off location</label>
-			    					<input type="text" class="form-control" placeholder="City, Airport, Station, etc">
-			    				</div>
+						  <div class="form-group">
+							<label for="" class="label">Pick-up location</label>
+							<input name="pickup" type="text" class="form-control" id="pickUpInput" placeholder="City, Airport, Station, etc" oninput="filterLocations(this.value, 'pickUpInput', 'pickUpLocationSuggestions')">
+							<ul id="pickUpLocationSuggestions" class="location-suggestions"></ul>
+						  </div>
+						  
+						  <div class="form-group">
+							<label for="" class="label">Drop-off location</label>
+							<input name="dropoff" type="text" class="form-control" placeholder="City, Airport, Station, etc" id="dropOffInput" oninput="filterLocations(this.value, 'dropOffInput', 'dropOffLocationSuggestions')">
+							<ul id="dropOffLocationSuggestions" class="location-suggestions"></ul>
+						  </div>
 			    				<div class="d-flex">
 			    					<div class="form-group mr-2">
 			                <label for="" class="label">Pick-up date</label>
-			                <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
+			                <input name="pickup_date" type="text" class="form-control" id="book_pick_date" placeholder="Date">
 			              </div>
 			              <div class="form-group ml-2">
 			                <label for="" class="label">Drop-off date</label>
-			                <input type="text" class="form-control" id="book_off_date" placeholder="Date">
+			                <input name="dropoff_date" type="text" class="form-control" id="book_off_date" placeholder="Date">
 			              </div>
 		              </div>
 		              <div class="form-group">
@@ -421,5 +424,35 @@
         </div>
     	</div>
     </section>	
+
+	<script>
+
+	  	const locations = [<%- locations.map(location => `'${location.city}'`).join(', ') %>];
+
+		function filterLocations(inputValue, inputId, suggestionsId) {
+		const filteredLocations = locations.filter(location => location.toLowerCase().startsWith(inputValue.toLowerCase()));
+		const locationSuggestions = document.getElementById(suggestionsId);
+
+		// Clear previous suggestions
+		locationSuggestions.innerHTML = '';
+
+		// Add filtered suggestions
+		filteredLocations.forEach(location => {
+			const li = document.createElement('li');
+			li.textContent = location;
+			li.addEventListener('click', () => selectLocation(location, locationSuggestions, inputId));
+			locationSuggestions.appendChild(li);
+		});
+		}
+
+		function selectLocation(location, locationSuggestions, inputId) {
+		const inputField = document.getElementById(inputId);
+		inputField.value = location;
+
+		// Clear location suggestions
+		locationSuggestions.innerHTML = '';
+		}
+	  </script>
+	  
 
 <%- include('../partials/footer') %>

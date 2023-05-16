@@ -19,7 +19,9 @@ router.get('/', async(req,res) => {
 
     try{
         
-        res.render('site/views/index')
+        const locations = await Location.findAll()
+
+        res.render('site/views/index', {locations})
 
     } catch(e) {
         console.log(e)
@@ -27,25 +29,31 @@ router.get('/', async(req,res) => {
 
 })
 
-router.get('/cars', async(req,res) => {
+router.get('/cars', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; // Current page number
+        const carsPerPage = 10; // Number of cars to display per page
 
-    try{
-        
+        const totalCount = await Car.count();
+        const totalPages = Math.ceil(totalCount / carsPerPage);
+
+        const offset = (page - 1) * carsPerPage;
         const cars = await Car.findAll({
             include: [
                 {
                     model: Brand
                 }
-            ]
-        })
+            ],
+            limit: carsPerPage,
+            offset: offset
+        });
 
-        res.render('site/views/cars', {cars})
-
-    } catch(e) {
-        console.log(e)
+        res.render('site/views/cars', { cars, page, totalPages });
+    } catch (e) {
+        console.log(e);
     }
+});
 
-})
 
 router.get('/cars/:slug', async(req,res) => {
 
@@ -155,6 +163,52 @@ router.post('/login', async(req,res) => {
     } catch(e) {
         console.log(e)
         res.status(400).send(e)
+    }
+
+})
+
+router.get('/search', async(req,res) => {
+
+    try{
+    
+        const date1 = new Date(req.query.pickup_date);
+        const date2 = new Date(req.query.dropoff_date);
+
+        const differenceMs = Math.abs(date2 - date1);
+        const days = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+
+        const location = await Location.findOne({
+            where: {
+                city: req.query.pickup
+            }
+        })
+
+        const page = parseInt(req.query.page) || 1; // Current page number
+        const carsPerPage = 10; // Number of cars to display per page
+
+        const totalCount = await Car.count();
+        const totalPages = Math.ceil(totalCount / carsPerPage);
+
+        const offset = (page - 1) * carsPerPage;
+
+        const cars = await Car.findAll({
+            where: {
+              locationId: location.id
+            },
+            include: [
+              {
+                model: Brand
+              }
+            ],
+            limit: carsPerPage,
+            offset: offset
+          });
+          
+
+        res.render('site/views/search', {cars, totalPages, page, location, days})
+
+    } catch(e) {
+        console.log(e)
     }
 
 })
