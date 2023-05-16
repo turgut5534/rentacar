@@ -13,6 +13,7 @@ const Car = require('../models/car')
 const Brand = require('../models/brand')
 const CarFeatures = require('../models/car_feature')
 const Review = require('../models/review')
+const Feature = require('../models/feature')
 
 router.get('/', async(req,res) => {
 
@@ -80,9 +81,11 @@ router.get('/cars/:slug', async(req,res) => {
             ],
             limit: 3
           });
+
+          const features = await Feature.findAll()
           
 
-        res.render('site/views/car-detail', {car, relatedCars})
+        res.render('site/views/car-detail', {car, relatedCars, features})
 
     } catch(e) {
         console.log(e)
