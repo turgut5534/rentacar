@@ -36,7 +36,7 @@
                     <div class="text">
                       <h3 class="heading mb-0 pl-3">
                           Mileage
-                          <span><%=car.mileage%></span>
+                          <span><%= car.mileage.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 3 }) %></span>
                       </h3>
                   </div>
               </div>
@@ -81,7 +81,7 @@
                     <div class="text">
                       <h3 class="heading mb-0 pl-3">
                           Luggage
-                          <span><%=car.lugguage%></span>
+                          <span><%=car.lugguage%> Bags</span>
                       </h3>
                   </div>
               </div>
