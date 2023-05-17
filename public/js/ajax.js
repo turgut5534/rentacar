@@ -62,3 +62,70 @@ $('#email-form').on('submit', function(e) {
     })
     
 })
+
+$('#register-form').on('submit', function(e) {
+
+    e.preventDefault()
+
+    const button = $('.register-button')
+
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        beforeSend: function() {
+            button.html('Saving...')
+        },
+        success: function(data) {
+            
+            iziToast.success({
+                title: 'OK',
+                message: data.message,
+            });
+            button.html('Send')
+            
+            setTimeout(() => {
+                location.href = '/customer/login'
+            }, 1500);
+
+        },
+        error: function(e) {
+
+            var response = JSON.parse(e.responseText);
+            
+            iziToast.error({
+                title: 'Error',
+                message: response.message,
+            });
+            button.html('Save')
+        }
+    })
+    
+})
+
+$('#customer-login-form').on('submit', function(e) {
+
+    e.preventDefault()
+
+    const button = $('.login-button')
+
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        beforeSend: function() {
+            button.html('Please wait...')
+        },
+        success: function(response) {
+            window.location.href = '/'
+        },
+        error: function(e) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Incorrect username or password',
+            });
+            button.html('Send')
+        }
+    })
+    
+})

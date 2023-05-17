@@ -6,10 +6,6 @@ const Customer = sequelize.define('customer', {
     name: {
       type: Sequelize.STRING
     },
-    lastname: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     email: {
       type: Sequelize.STRING
     },

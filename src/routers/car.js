@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const email = require('../utils/email')
 const { Op } = require('sequelize');
+const cAuth = require('../middlewares/customerAuth')
 
 const Customer = require('../models/customer')
 const Location = require('../models/location')
@@ -123,8 +124,29 @@ router.get('/services', (req,res) => {
     res.render('site/views/services')
 })
 
-router.get('/pricing', (req,res) => {
-    res.render('site/views/pricing')
+router.get('/pricing', async(req,res) => {
+
+    try{
+
+        const cars = await Car.findAll({
+            include: [
+                {
+                    model: Brand
+                },
+                {
+                    model: Review
+                }
+            ]
+        })
+
+        console.log(cars[0].reviews[0].rating)
+
+        res.render('site/views/pricing', {cars})
+    } catch(e) {
+        console.log(e)
+    }
+
+    
 })
 
 router.get('/blogs', (req,res) => {
@@ -134,6 +156,15 @@ router.get('/blogs', (req,res) => {
 router.get('/login', (req,res) => {
     res.render('site/views/login')
 })
+
+router.get('/customer/register', (req,res) => {
+    res.render('site/views/register')
+})
+
+router.get('/customer/login', (req,res) => {
+    res.render('site/views/customer-login')
+})
+
 
 router.post('/login', async(req,res) => {
 
@@ -175,6 +206,93 @@ router.post('/login', async(req,res) => {
         res.status(400).send(e)
     }
 
+})
+
+router.post('/customer/login', async(req,res) => {
+
+    try{
+        
+        const { email, password } = req.body
+
+        const customer = await Customer.findOne({
+            where: {email}
+        })
+
+        if(!customer) {
+            return res.status(400).json({
+                status: false,
+                message: 'Invalid email or password!'
+            })
+        }
+
+        const passwordMatch = await bcrypt.compare(password, customer.password)
+
+        if(!passwordMatch) {
+            return res.status(400).json({
+                status: false,
+                message: 'Invalid email or password!'
+            })
+        }
+
+        const token = jwt.sign({customerId: customer.id}, process.env.JWT_SECRET, {expiresIn: '12h'})
+
+        res.cookie('customerToken', token, {httpOnly: true})
+
+        res.status(200).json({
+            status: true,
+            message: 'Login successful!'
+        })
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+router.post('/customer/register', async(req,res) => {
+  
+    try{
+
+        const { name, email, password, repassword } = req.body
+        
+        if(password != repassword) {
+            return res.status(400).json({
+                status: false,
+                message: 'Password not match!'
+            })
+        }
+
+        const emailExists = await Customer.findOne({
+            where: {email}
+        })
+
+        if(emailExists) {
+            return res.status(400).json({
+                status: false,
+                message: 'A user with this email already exists!'
+            })
+        }
+
+
+        const customer = new Customer(req.body)
+        customer.password = await bcrypt.hash(password, 10)
+
+        await customer.save()
+
+        res.status(201).json({
+            status: false,
+            message: 'Success!.'
+        })
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).json({
+            status: false,
+            message: 'An error occured. Please try again later.'
+        })
+    }
+    
 })
 
 router.get('/search', async(req,res) => {
