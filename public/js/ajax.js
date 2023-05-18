@@ -129,3 +129,28 @@ $('#customer-login-form').on('submit', function(e) {
     })
     
 })
+
+$('#customer-image-input').on('change', function(e){
+
+    e.preventDefault()
+
+    var formData = new FormData()
+    var file = e.target.files[0]
+    formData.append('image', file)
+
+    $.ajax({
+        url: '/customer/profile/image/update', // Replace with your server-side upload endpoint
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            location.reload()
+        },
+        error: function(xhr, status, error) {
+          // Handle the error
+          console.error(error);
+        }
+      });
+
+})

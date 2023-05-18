@@ -3,9 +3,10 @@ const router = new express.Router()
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const email = require('../utils/email')
+const sequelize = require('sequelize')
 const { Op } = require('sequelize');
 const cAuth = require('../middlewares/customerAuth')
+const checkCustomer = require('../middlewares/checkCustomer')
 
 const Customer = require('../models/customer')
 const Location = require('../models/location')
@@ -17,9 +18,13 @@ const CarFeatures = require('../models/car_feature')
 const Review = require('../models/review')
 const Feature = require('../models/feature')
 
+router.use(checkCustomer)
+
 router.get('/', async(req,res) => {
 
     try{
+
+        console.log(req.customer)
         
         const locations = await Location.findAll()
 
@@ -124,6 +129,13 @@ router.get('/services', (req,res) => {
     res.render('site/views/services')
 })
 
+router.get('/customer/logout', (req, res) => {
+
+    res.cookie('customerToken', '', { expires: new Date(0) })
+  
+    res.redirect('/customer/login')
+  })
+
 router.get('/pricing', async(req,res) => {
 
     try{
@@ -147,6 +159,116 @@ router.get('/pricing', async(req,res) => {
     }
 
     
+})
+
+router.get('/search', async(req,res) => {
+
+    try{
+    
+        const pickupdate = req.query.pickup_date
+        const dropoffdate = req.query.dropoff_date
+
+        const date1 = new Date(pickupdate);
+        const date2 = new Date(dropoffdate);
+
+        const differenceMs = Math.abs(date2 - date1);
+        const days = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+
+        const location = await Location.findOne({
+            where: {
+                city: req.query.pickup
+            }
+        })
+
+        if(!location) {
+            return res.redirect('/')
+        }
+
+        const page = parseInt(req.query.page) || 1; // Current page number
+        const carsPerPage = 10; // Number of cars to display per page
+
+        const totalCount = await Car.count();
+        const totalPages = Math.ceil(totalCount / carsPerPage);
+
+        const offset = (page - 1) * carsPerPage;
+
+        const cars = await Car.findAll({
+            where: {
+              locationId: location.id
+            },
+            include: [
+              {
+                model: Brand
+              },
+              {
+                model: Rental
+              }
+            ],
+            limit: carsPerPage,
+            offset: offset
+        });
+
+        req.session.pickup = req.query.pickup_date
+        req.session.dropoff = req.query.dropoff_date
+        req.session.days = days
+
+        res.render('site/views/search', {cars, totalPages, page, location,days,date1,date2})
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.get('/book', async(req,res) => {
+
+    try{
+
+        const car = await Car.findByPk(req.query.vehicle, {
+            include: [
+                {
+                    model: Brand
+                }
+            ]
+        })
+
+        const day = req.session.days
+        
+        const total = car.price * day
+
+        req.session.totalPrice = total;
+        req.session.totalDays = day;
+        req.session.carId = car.id
+
+        res.render('site/views/book', {car,day, total})
+    } catch(e) {
+        console.log(e)
+    }
+})
+
+router.post('/book/confirm', async(req,res) => {
+
+    try{
+
+        const total = req.session.totalPrice
+        const pickup = req.session.pickup
+        const dropoff = req.session.dropoff
+        const carId = req.session.carId
+
+        const reservation = new Rental({
+            start_date: pickup,
+            end_date: dropoff,
+            cost: total,
+            carId: carId,
+            customerId: req.customer.id
+        })
+
+        await reservation.save()
+        
+    } catch(e) {
+        console.log(e)
+    }
+
 })
 
 router.get('/blogs', (req,res) => {
@@ -293,52 +415,6 @@ router.post('/customer/register', async(req,res) => {
         })
     }
     
-})
-
-router.get('/search', async(req,res) => {
-
-    try{
-    
-        const date1 = new Date(req.query.pickup_date);
-        const date2 = new Date(req.query.dropoff_date);
-
-        const differenceMs = Math.abs(date2 - date1);
-        const days = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
-
-        const location = await Location.findOne({
-            where: {
-                city: req.query.pickup
-            }
-        })
-
-        const page = parseInt(req.query.page) || 1; // Current page number
-        const carsPerPage = 10; // Number of cars to display per page
-
-        const totalCount = await Car.count();
-        const totalPages = Math.ceil(totalCount / carsPerPage);
-
-        const offset = (page - 1) * carsPerPage;
-
-        const cars = await Car.findAll({
-            where: {
-              locationId: location.id
-            },
-            include: [
-              {
-                model: Brand
-              }
-            ],
-            limit: carsPerPage,
-            offset: offset
-          });
-          
-
-        res.render('site/views/search', {cars, totalPages, page, location, days})
-
-    } catch(e) {
-        console.log(e)
-    }
-
 })
 
 router.post('/contact', async(req,res) => {

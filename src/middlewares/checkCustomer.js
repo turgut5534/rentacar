@@ -6,7 +6,7 @@ const authMiddleware = async (req, res, next) => {
     const token = req.cookies.customerToken
 
     if (!token) {
-      throw new Error('No token found')
+      return next()
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET)
@@ -16,13 +16,10 @@ const authMiddleware = async (req, res, next) => {
     req.customer = customer
 
     res.locals.customer = customer
-    // res.locals.lastUrl = req.originalUrl.split('/')[2]
 
     next()
   } catch (err) {
- 
     console.log(err)
-    res.redirect('/customer/login')
   }
 }
 
