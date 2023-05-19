@@ -34,7 +34,7 @@
                           <span class="cat"><%=car.brand.name%></span>
                           <p class="price ml-auto">$<%=car.price * days%> <span>/ <%=days%> day/s</span></p>
                         </div>
-                        <p class="d-flex mb-0 d-block"><a href="/book?vehicle=<%=car.id%>&pickup=<%=date1%>&dropoff=<%=date2%>&day=<%=days%>" class="btn btn-primary py-2 mr-1">Book now</a> <a href="/cars/<%=car.slug%>" class="btn btn-secondary py-2 ml-1">Details</a></p>
+                        <p class="d-flex mb-0 d-block"><a href="/book?vehicle=<%=car.id%>&pickup=<%=date1%>&dropoff=<%=date2%>&day=<%=days%>" class="btn btn-primary py-2 mr-1">Book now</a> <a target="_blank" href="/cars/<%=car.slug%>" class="btn btn-secondary py-2 ml-1">Details</a></p>
                       </div>
                     </div>
                   </div>

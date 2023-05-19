@@ -232,6 +232,10 @@ router.get('/book', async(req,res) => {
             ]
         })
 
+        if(!car) {
+            return res.send('Car not found!')
+        }
+
         const day = req.session.days
         
         const total = car.price * day
@@ -246,9 +250,37 @@ router.get('/book', async(req,res) => {
     }
 })
 
+router.get('/thanks', async(req,res)=> {
+
+    
+    try{
+
+        if(!req.session.reservation) {
+            return res.redirect('/')
+        }
+
+        const reservation = await Rental.findByPk(req.session.reservation.id, {
+            include: [
+              { model: Car, include: [Brand] }
+            ]
+          });
+        
+        delete req.session.reservation 
+        
+        res.render('site/views/thank-you', {reservation})
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
 router.post('/book/confirm', async(req,res) => {
 
     try{
+
+        if(!req.customer) {
+            return res.redirect('/')
+        }
 
         const total = req.session.totalPrice
         const pickup = req.session.pickup
@@ -263,7 +295,11 @@ router.post('/book/confirm', async(req,res) => {
             customerId: req.customer.id
         })
 
-        await reservation.save()
+        const newReservation = await reservation.save()
+
+        req.session.reservation = newReservation
+
+        res.redirect('/thanks')
         
     } catch(e) {
         console.log(e)
@@ -284,7 +320,7 @@ router.get('/customer/register', (req,res) => {
     if(req.customer) {
         return res.redirect('/')
     }
-    
+
     res.render('site/views/register')
 })
 
