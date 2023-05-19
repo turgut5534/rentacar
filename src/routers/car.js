@@ -280,10 +280,20 @@ router.get('/login', (req,res) => {
 })
 
 router.get('/customer/register', (req,res) => {
+
+    if(req.customer) {
+        return res.redirect('/')
+    }
+    
     res.render('site/views/register')
 })
 
 router.get('/customer/login', (req,res) => {
+
+    if(req.customer) {
+        return res.redirect('/')
+    }
+
     res.render('site/views/customer-login')
 })
 

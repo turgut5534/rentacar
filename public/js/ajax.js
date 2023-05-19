@@ -117,7 +117,8 @@ $('#customer-login-form').on('submit', function(e) {
             button.html('Please wait...')
         },
         success: function(response) {
-            window.location.href = '/'
+            // window.location.href = '/'
+            location.reload()
         },
         error: function(e) {
             iziToast.error({
