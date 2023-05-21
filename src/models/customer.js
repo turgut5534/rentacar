@@ -30,7 +30,7 @@ const Customer = sequelize.define('customer', {
 
   Rental.belongsTo(Customer)
 
-  // sequelize.sync()
+  sequelize.sync()
 
   module.exports = Customer
   

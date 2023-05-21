@@ -17,6 +17,7 @@ const Brand = require('../models/brand')
 const CarFeatures = require('../models/car_feature')
 const Review = require('../models/review')
 const Feature = require('../models/feature')
+const moment = require('moment');
 
 router.use(checkCustomer)
 
@@ -168,8 +169,8 @@ router.get('/search', async(req,res) => {
         const pickupdate = req.query.pickup_date
         const dropoffdate = req.query.dropoff_date
 
-        const date1 = new Date(pickupdate);
-        const date2 = new Date(dropoffdate);
+        const date1 = moment.utc(pickupdate).toDate();
+        const date2 = moment.utc(dropoffdate).toDate();
 
         const differenceMs = Math.abs(date2 - date1);
         const days = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
@@ -208,9 +209,12 @@ router.get('/search', async(req,res) => {
             offset: offset
         });
 
-        req.session.pickup = req.query.pickup_date
-        req.session.dropoff = req.query.dropoff_date
+        req.session.pickup = date1
+        req.session.dropoff = date2
         req.session.days = days
+        req.session.pickup_location = req.query.pickup
+        req.session.dropoff_location = req.query.dropoff
+        req.session.time = req.query.time
 
         res.render('site/views/search', {cars, totalPages, page, location,days,date1,date2})
 
@@ -250,9 +254,58 @@ router.get('/book', async(req,res) => {
     }
 })
 
+router.post('/book/confirm', async(req,res) => {
+
+    try{
+
+        if(!req.customer) {
+            return res.redirect('/')
+        }
+
+        const total = req.session.totalPrice
+        const pickup = req.session.pickup
+        const dropoff = req.session.dropoff
+        const carId = req.session.carId
+
+        console.log(req.session.pickup_location)
+
+        const pickup_location = await Location.findOne({
+            where: {
+                city: req.session.pickup_location
+            }
+        })
+
+        const dropoff_location = await Location.findOne({
+            where: {
+                city: req.session.dropoff_location
+            }
+        })
+
+        const reservation = new Rental({
+            start_date: pickup,
+            end_date: dropoff,
+            time: req.session.time,
+            cost: total,
+            carId: carId,
+            customerId: req.customer.id,
+            pickup_location: pickup_location.id,
+            dropoff_location: dropoff_location.id
+        })
+
+        const newReservation = await reservation.save()
+
+        req.session.reservation = newReservation
+
+        res.redirect('/thanks')
+        
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
 router.get('/thanks', async(req,res)=> {
 
-    
     try{
 
         if(!req.session.reservation) {
@@ -274,38 +327,6 @@ router.get('/thanks', async(req,res)=> {
 
 })
 
-router.post('/book/confirm', async(req,res) => {
-
-    try{
-
-        if(!req.customer) {
-            return res.redirect('/')
-        }
-
-        const total = req.session.totalPrice
-        const pickup = req.session.pickup
-        const dropoff = req.session.dropoff
-        const carId = req.session.carId
-
-        const reservation = new Rental({
-            start_date: pickup,
-            end_date: dropoff,
-            cost: total,
-            carId: carId,
-            customerId: req.customer.id
-        })
-
-        const newReservation = await reservation.save()
-
-        req.session.reservation = newReservation
-
-        res.redirect('/thanks')
-        
-    } catch(e) {
-        console.log(e)
-    }
-
-})
 
 router.get('/blogs', (req,res) => {
     res.render('site/views/blogs')
@@ -495,22 +516,22 @@ router.post('/contact', async(req,res) => {
 
 })
 
-// router.post('/user/save', async(req,res) => {
+router.post('/user/save', async(req,res) => {
 
-//     try{
+    try{
         
-//         const user = new User(req.body)
-//         user.password = await bcrypt.hash(req.body.password, 10)
+        const user = new User(req.body)
+        user.password = await bcrypt.hash(req.body.password, 10)
 
-//         await user.save()
+        await user.save()
 
-//         res.status(201).send()
+        res.status(201).send()
 
-//     } catch(e) {
-//         console.log(e)
-//         res.status(400).send(e)
-//     }
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
 
-// })
+})
 
 module.exports = router

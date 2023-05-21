@@ -11,6 +11,10 @@ const Rental = sequelize.define('rental', {
       type: Sequelize.DATE,
       allowNull: false
     },
+    time : {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
     cost: {
       type: Sequelize.STRING,
       allowNull: false
