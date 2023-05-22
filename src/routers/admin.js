@@ -42,6 +42,20 @@ router.get('/dashboard', (req,res) => {
 
 })
 
+router.get('/locations', async(req,res) => {
+
+    try{
+
+        const locations = await Location.findAll()
+
+        res.render('admin/views/locations/locations', {locations})
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
 router.get('/cars', async(req,res) => {
 
     try{

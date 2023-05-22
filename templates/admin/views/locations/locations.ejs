@@ -1,0 +1,48 @@
+<%- include('../../partials/head' , { title: 'Locations' }) %>
+<%- include('../../partials/sidebar') %>
+<%- include('../../partials/header') %>
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="row align-items-center mb-3">
+            <div class="col-6">
+                <div class="h2">
+                    Locations
+                </div>
+            </div>
+            <div class="col-6 text-end">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addlocationModal">
+                    +Add
+                  </button>
+            </div>
+        </div>
+
+        <div class="row categories">
+            <% if(locations.length) { %>
+                <% locations.forEach((location)=> { %>
+                    <div class="col-12 col-md-6 col-lg-4 location-<%= location.id %>">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="capitalize card-title location-name-h5-<%= location.id %>">
+                                    <%= location.name %>
+                                </h5>
+                                <div class="d-flex justify-content-end">
+                                    <a href="javascript:;"
+                                        class="btn btn-sm btn-outline-secondary me-2 edit-location edit-location-<%= location.id %>" data-id="<%= location.id %>" data-title="<%= location.name %>" data-rate="<%= location.rate %>" data- data-bs-toggle="modal" data-bs-target="#editlocationModal">Edit</a>
+                                    <a href="javascript:;" data-data="location" data-href="/admin/cars/locations/delete/<%= location.id %>" data-title="<%= location.name %>" data-id="<%= location.id %>" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else {%>
+                <div class="col-12 d-flex justify-content-center align-items-center mt-3">
+                    <p class="h4">You have no locations</p>
+                  </div>
+            <% } %>
+        </div>
+    </div>
+</main>
+
+<%- include('../../partials/footer') %>
