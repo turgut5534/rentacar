@@ -77,13 +77,13 @@
 </div>
 
 
-<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addFeatureModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/category/save" method="POST" id="category-save-form">
+            <form action="/admin/cars/features/save" method="POST" id="feature-save-form">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Feature</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -96,35 +96,35 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary save-category-button">Save</button>
+                    <button type="submit" class="btn btn-primary save-feature-button">Save</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editFeatureModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/category/update" method="POST" id="category-edit-form">
+            <form action="/admin/cars/features/update" method="POST" id="feature-edit-form">
 
-                <input type="hidden" id="edit-category-id" name="id" value="">
+                <input type="hidden" id="edit-feature-id" name="id" value="">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Feature</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
                     <div class="mb-3">
                         <label for="inputText" class="form-label">Name</label>
-                        <input required type="text" name="name" class="form-control" id="category-title">
+                        <input required type="text" name="name" class="form-control" id="feature-title">
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary save-category-button">Save</button>
+                    <button type="submit" class="btn btn-primary save-feature-button">Save</button>
                 </div>
             </form>
         </div>

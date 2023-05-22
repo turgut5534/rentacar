@@ -255,6 +255,76 @@ router.delete('/cars/delete/:id', async(req,res) => {
 
 })
 
+router.get('/cars/features', async(req,res) => {
+
+    try{
+
+        const features = await Feature.findAll()
+        res.render('admin/views/carFeatures/carFeatures', {features})
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+
+router.post('/cars/features/save', async(req,res) => {
+
+    try{
+
+        const feature = new Feature(req.body)
+
+        const newFeature = await feature.save()
+
+        res.status(201).json({feature: newFeature})
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+router.post('/cars/features/update', async(req,res) => {
+
+    try{
+
+        const feature = await Feature.findByPk(req.body.id)
+
+        await feature.update(req.body)
+
+        res.status(201).json({feature: feature})
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+router.delete('/cars/features/delete/:id', async(req,res) => {
+
+    try{
+
+        const feature = await Feature.findByPk(req.params.id)
+
+        if(!feature) {
+            return res.status(400).send(e)
+        }
+
+        await feature.destroy()
+
+        res.status(200).send()
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+
 router.get('/saveFeatures', async(req,res) => {
     try {
         await Feature.create({name: 'AirConditioning'});

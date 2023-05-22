@@ -1,0 +1,48 @@
+<%- include('../../partials/head' , { title: 'Car Features' }) %>
+<%- include('../../partials/sidebar') %>
+<%- include('../../partials/header') %>
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="row align-items-center mb-3">
+            <div class="col-6">
+                <div class="h2">
+                    Categories
+                </div>
+            </div>
+            <div class="col-6 text-end">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFeatureModal">
+                    +Add
+                  </button>
+            </div>
+        </div>
+
+        <div class="row categories">
+            <% if(features.length) { %>
+                <% features.forEach((feature)=> { %>
+                    <div class="col-12 col-md-6 col-lg-4 feature-<%= feature.id %>">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="capitalize card-title feature-name-h5-<%= feature.id %>">
+                                    <%= feature.name %>
+                                </h5>
+                                <div class="d-flex justify-content-end">
+                                    <a href="javascript:;"
+                                        class="btn btn-sm btn-outline-secondary me-2 edit-feature edit-feature-<%= feature.id %>" data-id="<%= feature.id %>" data-title="<%= feature.name %>" data-rate="<%= feature.rate %>" data- data-bs-toggle="modal" data-bs-target="#editFeatureModal">Edit</a>
+                                    <a href="javascript:;" data-data="feature" data-href="/admin/cars/features/delete/<%= feature.id %>" data-title="<%= feature.name %>" data-id="<%= feature.id %>" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else {%>
+                <div class="col-12 d-flex justify-content-center align-items-center mt-3">
+                    <p class="h4">You have no features</p>
+                  </div>
+            <% } %>
+        </div>
+    </div>
+</main>
+
+<%- include('../../partials/footer') %>

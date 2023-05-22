@@ -60,15 +60,15 @@ $('body').on('click', '.edit-skill', function(e) {
     
 })
 
-$('body').on('click', '.edit-category', function(e) {
+$('body').on('click', '.edit-feature', function(e) {
 
     e.preventDefault()
 
     const id = $(this).data('id')
     const title = $(this).data('title')
         
-    $('#edit-category-id').val(id)
-    $('#category-title').val(title)
+    $('#edit-feature-id').val(id)
+    $('#feature-title').val(title)
     
 })
 
@@ -111,11 +111,11 @@ $('body').on('submit','#skill-edit-form', function(e) {
 })
 
 
-$('body').on('submit','#category-edit-form', function(e) {
+$('body').on('submit','#feature-edit-form', function(e) {
 
     e.preventDefault()
 
-    const button = $('.save-category-button')
+    const button = $('.save-feature-button')
 
     $.ajax({
         type: 'POST',
@@ -126,11 +126,16 @@ $('body').on('submit','#category-edit-form', function(e) {
         },
         success: function(response) {
 
-            $('.category-name-h5-'+ response.category.id).html(response.category.name)
+            $('.feature-name-h5-'+ response.feature.id).html(response.feature.name)
       
-        $('#editCategoryModal').modal('hide')
+        $('#editFeatureModal').modal('hide')
         $('.modal-backdrop').remove();
         button.html('Update')
+
+        iziToast.success({
+            title: 'OK',
+            message: 'Feature updated successfuly!',
+        });
 
         },
         error: function(e) {
@@ -233,11 +238,11 @@ $('.delete-file').on('click', function() {
 })
 
 
-$('body').on('submit','#category-save-form', function(e) {
+$('body').on('submit','#feature-save-form', function(e) {
 
     e.preventDefault()
 
-    const button = $('.save-category-button')
+    const button = $('.save-feature-button')
 
     $.ajax({
         type: 'POST',
@@ -248,30 +253,31 @@ $('body').on('submit','#category-save-form', function(e) {
         },
         success: function(data) {
 
-            console.log(data.category.id)
+            console.log(data.feature.id)
 
-            $('.categories').append(`<div class="col-12 col-md-6 col-lg-4 category-${data.category.id}">
+            $('.categories').append(`<div class="col-12 col-md-6 col-lg-4 category-${data.feature.id}">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="capitalize card-title category-name-h5-${data.category.id}">
-                        ${data.category.name}
+                    <h5 class="capitalize card-title category-name-h5-${data.feature.id}">
+                        ${data.feature.name}
                     </h5>
                     <div class="d-flex justify-content-end">
                         <a href="javascript:;"
-                            class="btn btn-sm btn-outline-secondary me-2 edit-category edit-category-${data.category.id}" data-id="${data.category.id}" data-title="${data.category.name}" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Edit</a>
-                        <a href="javascript:;" data-data="category" data-href="/admin/category/delete/${data.category.id}" data-title="${data.category.name}" data-id="${data.category.id}" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
+                            class="btn btn-sm btn-outline-secondary me-2 edit-category edit-category-${data.feature.id}" data-id="${data.feature.id}" data-title="${data.feature.name}" data-bs-toggle="modal" data-bs-target="#editCategoryModal">Edit</a>
+                        <a href="javascript:;" data-data="category" data-href="/admin/category/delete/${data.feature.id}" data-title="${data.feature.name}" data-id="${data.feature.id}" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
                     </div>
                 </div>
             </div>
         </div>`)
 
         button.html('Save')
-        $('#addCategoryModal').modal('hide')
+        $('#addFeatureModal').modal('hide')
         $('.modal-backdrop').remove();
-        $('#category-save-form')[0].reset();
+        $('#feature-save-form')[0].reset();
 
         },
         error: function(e) {
+            console.log(e)
             iziToast.error({
                 title: 'Error',
                 message: 'An error occured saving the data',
