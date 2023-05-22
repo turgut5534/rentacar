@@ -21,6 +21,12 @@
           </a>
         </li>
 
+        <li class="sidebar-item <% if(lastUrl == 'profile') { %> active <% } %>">
+          <a class="sidebar-link" href="/admin/locations">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Locations</span>
+          </a>
+        </li>
+
         <li class="sidebar-item <% if(lastUrl == 'service') { %> active <% } %>">
           <a class="sidebar-link" data-bs-toggle="collapse" href="#collapseServices" role="button" aria-expanded="false"
             aria-controls="collapseExample">

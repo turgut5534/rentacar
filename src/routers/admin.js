@@ -9,6 +9,7 @@ const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
 const slugify = require('slugify')
 const {Op} = require('sequelize')
+const moment = require('moment')
 
 router.use(auth)
 
@@ -136,6 +137,73 @@ router.get('/cars/add', async(req,res) => {
         const carfeatures = await Feature.findAll()
 
         res.render('admin/views/cars/add-car', {brands, locations, carfeatures})
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.post('/cars/book/save', async(req,res) => {
+
+    try{
+
+
+        const { id,start_date, end_date, time, customerId, pickup_location, dropoff_location } = req.body
+
+        const date1 = moment.utc(start_date).toDate();
+        const date2 = moment.utc(end_date).toDate();
+
+        const differenceMs = Math.abs(date2 - date1);
+        const days = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+
+        const car = await Car.findByPk(id)
+
+        const customer = await Customer.findByPk(customerId)
+
+        const pickupLocation = await Location.findByPk(pickup_location)
+        const dropoffLocation = await Location.findByPk(dropoff_location)
+
+        await Rental.create({
+            start_date: start_date,
+            end_date: end_date,
+            time: time,
+            duration: days,
+            cost: car.price * days,
+            customerId: customer.id,
+            carId: car.id,
+            pickup_location: pickupLocation.id,
+            dropoff_location: dropoffLocation.id
+        })
+
+        res.redirect('/admin/cars/status/rented')
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.get('/cars/book/:id', async(req,res) => {
+
+    try{
+
+        const car = await Car.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Brand
+                },
+                {
+                    model: Location
+                }
+            ]
+        })
+
+        const customers = await Customer.findAll()
+
+        const locations = await Location.findAll()
+
+        res.render('admin/views/cars/book', {car, customers, locations})
+
     } catch(e) {
         console.log(e)
     }

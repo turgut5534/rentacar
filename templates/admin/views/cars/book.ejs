@@ -1,0 +1,103 @@
+<%- include('../../partials/head' , { title: 'Book car' }) %>
+    <%- include('../../partials/sidebar') %>
+        <%- include('../../partials/header') %>
+
+            <main class="content">
+                <div class="container-fluid p-0">
+
+                    <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                            <div class="h2">
+                                Make a reservation for <%= car.brand.name %> <%= car.model %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12 col-lg-3">
+
+                            <div class="mb-3">
+                                <img class="car-image" src="/cars/<%=car.image%>" alt="">
+                            </div>
+
+                            <div class="mb-3 text-start">
+                                <p class="h4">Location: <span><%= car.location.city %></span> </p>
+                                <p class="h4">Price: <span>$<%= car.price %></span></p>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-lg-9">
+                            <form action="/admin/cars/book/save" method="POST" class="blog-form">
+
+                                <input type="hidden" name="id" value="<%= car.id %>">
+
+                                <div class="mb-3">
+                                    <label for="start_date" class="form-label">Start Date:</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control"
+                                        required >
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="end_date" class="form-label">End Date:</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="end_date" class="form-label">Time:</label>
+                                    <input type="time" id="end_date" name="time" class="form-control"
+                                        required>
+                                </div>
+
+                                <% if(customers.length) { %>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="">Customer</label>
+                                        <select name="customerId" id="" class="form-control">
+                                            <% customers.forEach((customer)=> {%>
+                                                <option value="<%=customer.id%>"><%=customer.name%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                <% } %>
+
+                                <% if(locations.length) { %>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="">Pick Up Location</label>
+                                        <select name="pickup_location" id="" class="form-control">
+                                            <% locations.forEach((location)=> {%>
+                                                <option value="<%=location.id%>"><%=location.city%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                <% } %>
+
+                                <% if(locations.length) { %>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="">Drop off Location</label>
+                                        <select name="dropoff_location" id="" class="form-control">
+                                            <% locations.forEach((location)=> {%>
+                                                <option value="<%=location.id%>"><%=location.city%>
+                                                </option>
+                                                <%})%>
+                                        </select>
+                                    </div>
+                                <% } %>
+
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Confirm reservation</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </main>
+
+            <%- include('../../partials/footer') %>
