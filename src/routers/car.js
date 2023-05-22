@@ -215,6 +215,7 @@ router.get('/search', async(req,res) => {
         req.session.pickup_location = req.query.pickup
         req.session.dropoff_location = req.query.dropoff
         req.session.time = req.query.time
+        req.session.duration = days
 
         res.render('site/views/search', {cars, totalPages, page, location,days,date1,date2})
 
@@ -289,7 +290,8 @@ router.post('/book/confirm', async(req,res) => {
             carId: carId,
             customerId: req.customer.id,
             pickup_location: pickup_location.id,
-            dropoff_location: dropoff_location.id
+            dropoff_location: dropoff_location.id,
+            duration: req.session.duration
         })
 
         const newReservation = await reservation.save()

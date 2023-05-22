@@ -1,0 +1,61 @@
+<%- include('../../partials/head' , { title: 'Edit reservation' }) %>
+    <%- include('../../partials/sidebar') %>
+        <%- include('../../partials/header') %>
+
+            <main class="content">
+                <div class="container-fluid p-0">
+
+                    <div class="row align-items-center mb-3">
+                        <div class="col-6">
+                            <div class="h2">
+                                Edit reservation for <%= reservation.customer.name %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12 col-lg-3">
+
+                            <div class="mb-3">
+                                <img class="reservation-image" src="/reservations/<%=reservation.image%>" alt="">
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-lg-9">
+                            <form action="/admin/cars/extend/save" method="POST" class="blog-form">
+
+                                <input type="hidden" name="id" value="<%=reservation.id%>">
+
+
+                                <div class="mb-3">
+                                    <% const startDate = new Date(reservation.start_date); %>
+                            		<% const startDateString = startDate.toISOString().substr(0, 10); %>
+                                    <label for="start_date" class="form-label">Start Date:</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control"
+                                        required value="<%= startDateString %>">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <% const endDate = new Date(reservation.end_date); %>
+                            		<% const endDateString = endDate.toISOString().substr(0, 10); %>
+                                    <label for="end_date" class="form-label">End Date:</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control"
+                                        required value="<%= endDateString %>">
+                                </div>
+
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Update Reservation</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </main>
+
+            <%- include('../../partials/footer') %>

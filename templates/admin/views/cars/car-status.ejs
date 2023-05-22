@@ -30,31 +30,28 @@
                                 <%= car.name %>
                             </h5>
                             <% car.rentals.forEach((reservation)=> {%>
-                                <div class="mb-3 reservation-<%=reservation.id%> bg-info rounded-3 text-light p-2">
+                                <div class="mb-3 reservation-<%=reservation.id%> <%if(reservation.is_delivered){%>bg-success<%}else{%>bg-info<%}%> rounded-3 text-light p-2">
                                     <p>Customer: <span><%= reservation.customer.name %></span></p>
                                     <p>Start Date: <span><%= reservation.start_date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></span> </p>
                                     <p>End Date: <span><%= reservation.end_date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></span> </p>
-                                    <p>Status: <span><%= reservation.is_delivered %></span></p>
+                                    <p>Status: <span><% if(reservation.is_delivered){ %>Delivered<%}else{%>On Customer<%}%></span></p>
+
+                                    <div class="text-end">
+                                        <% if(car.rentals.length){ %>
+                                            <% if (new Date() >= new Date(reservation.end_date) && reservation.is_delivered == 0 ) { %>
+                                            <button data-id="<%= reservation.id %>" type="button" class="btn btn-primary me-2 receive-car">Receive</button>
+                                            <% } %>
+                                            <a href="/admin/cars/extend/<%= reservation.id %>" class="btn btn-success">Extend</a>
+                                            <%}else{%>
+                                            <a class="btn btn-primary me-2" href="">Book Now</a>    
+                                        <%}%>
+                                    </div>
+
                                 </div>   
+                                
                             <%})%>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-muted">
-                              
-                            </small>
-                            <div class="float-end">
-   
-                                <% if(car.rentals.length){ %>
-                                <a href="/admin/cars/edit/<%= car.id %>"
-                                    class="btn btn-primary me-2">Receive</a>
-                                <button type="button" class="btn btn-sm btn-outline-danger">Extend</button>
-                                <%}else{%>
-                                <a class="btn btn-primary me-2" href="">Book Now</a>    
-                                <%}%>
-                                
-                 
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <% }) %>

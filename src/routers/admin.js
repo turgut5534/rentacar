@@ -214,6 +214,79 @@ router.post('/cars/save', upload.single('image'), compressImage, async(req,res) 
 
 })
 
+router.post('/cars/takecar/:id', async(req,res) => {
+
+    try{
+
+        const reservation = await Rental.findByPk(req.params.id)
+
+        reservation.is_delivered = true
+
+        await reservation.save()
+
+        res.status(200).send()
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.get('/cars/extend/:id', async(req,res) => {
+
+    try{
+
+        const reservation = await Rental.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Customer
+                }
+            ]
+        })
+
+        res.render('admin/views/cars/extend', {reservation})
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.post('/cars/extend/save', async(req,res) => {
+
+    try{
+
+        const reservation = await Rental.findByPk(req.body.id)
+        
+        const car = await Car.findByPk(reservation.carId)
+
+        const allReservations = await Rental.findAll({
+            where: {
+                carId: car.id,
+                id: { [Op.ne]: reservation.id }
+            }
+        })
+
+        const isBusy = allReservations.some(existingReservation =>
+            reservation.start_date >= existingReservation.start_date && reservation.start_date <= existingReservation.end_date ||
+            reservation.end_date >= existingReservation.start_date && reservation.end_date <= existingReservation.end_date
+        )
+
+        console.log(isBusy)
+
+        if(isBusy) {
+            return res.send('Sorry! This date is not available')
+        }
+
+        await reservation.update(req.body)
+
+        res.redirect('/admin/cars/status/rented')
+
+    } catch(e) {
+        console.log(e)
+    }
+
+})
 
 router.post('/cars/update', upload.single('image'), compressImage, async(req,res) => {
 

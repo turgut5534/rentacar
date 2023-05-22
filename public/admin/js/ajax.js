@@ -287,3 +287,49 @@ $('body').on('submit','#feature-save-form', function(e) {
     })
     
 })
+
+$('.receive-car').on('click', function(e) {
+
+    e.preventDefault()
+
+    const id = $(this).data('id')
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This car will be taken from the customer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes I confirm',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+            
+            $.ajax({
+                type: 'POST',
+                url: "/admin/cars/takecar/"+ id,
+                success: function(data) {
+
+                    iziToast.success({
+                        title: 'Ok',
+                        message: 'The car is taken back from the customer!',
+                    });
+
+                    setTimeout(() => {
+                        location.reload()
+                    }, 1500);
+       
+                },
+                error: function(e) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'An error occured deleting the file',
+                    });
+                }
+            })
+
+        }
+      })
+
+})
