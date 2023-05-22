@@ -8,6 +8,7 @@ const fs = require('fs')
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid')
 const slugify = require('slugify')
+const {Op} = require('sequelize')
 
 router.use(auth)
 
@@ -16,6 +17,8 @@ const CarFeatures = require('../models/car_feature')
 const Brand = require('../models/brand')
 const Location = require('../models/location')
 const Feature = require('../models/feature')
+const Rental = require('../models/rental')
+const Customer = require('../models/customer')
 
 const uploadDirectory = path.join(__dirname, '../../uploads')
 
@@ -49,11 +52,73 @@ router.get('/cars', async(req,res) => {
                 },
                 {
                     model: Brand
+                },
+                {
+                    model: Rental
                 }
             ]
         })
 
          res.render('admin/views/cars/cars', {cars})
+    } catch(e) {
+        console.log(e)
+    }
+
+})
+
+router.get('/cars/status/:status', async(req,res) => {
+
+    try{
+
+        let cars; 
+
+        if(req.params.status == 'rented') {
+            cars = await Car.findAll({
+                include: [
+                    {
+                        model: CarFeatures
+                    },
+                    {
+                        model: Brand
+                    },
+                    {
+                        model: Rental,
+                        where: {
+                            carId: {
+                                [Op.ne]: null
+                            }
+                        },
+                        include: [
+                            {
+                                model: Customer
+                            }
+                        ]
+                    }
+                ]
+            });
+        } else {
+            cars = await Car.findAll({
+                include: [
+                    {
+                        model: CarFeatures
+                    },
+                    {
+                        model: Brand
+                    },
+                    {
+                        model: Rental,
+                        required: false // Include rentals if available, but don't require them
+                    }
+                ],
+                where: {
+                    '$Rentals.id$': null // Filter cars that don't have any rentals
+                }
+            });
+        }
+
+        
+
+         res.render('admin/views/cars/car-status', {cars})
     } catch(e) {
         console.log(e)
     }

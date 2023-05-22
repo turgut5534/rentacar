@@ -15,6 +15,12 @@
           </a>
         </li>
 
+        <li class="sidebar-item <% if(lastUrl == 'profile') { %> active <% } %>">
+          <a class="sidebar-link" href="/admin/cars/features">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Features</span>
+          </a>
+        </li>
+
         <li class="sidebar-item <% if(lastUrl == 'service') { %> active <% } %>">
           <a class="sidebar-link" data-bs-toggle="collapse" href="#collapseServices" role="button" aria-expanded="false"
             aria-controls="collapseExample">
@@ -24,10 +30,10 @@
             <a class="sidebar-link" href="/admin/cars">
               <i class="fas fa-th"></i> <span class="align-middle">All Cars</span>
             </a>
-            <a class="sidebar-link" href="/admin/cars?rented">
+            <a class="sidebar-link" href="/admin/cars/status/rented">
               <i class="fas fa-plus"></i> <span class="align-middle">Rented Cars</span>
             </a>
-            <a class="sidebar-link" href="/admin/cars?waiting">
+            <a class="sidebar-link" href="/admin/cars/status/available">
               <i class="fas fa-plus"></i> <span class="align-middle">Waiting Cars</span>
             </a>
             <a class="sidebar-link" href="/admin/cars/add">

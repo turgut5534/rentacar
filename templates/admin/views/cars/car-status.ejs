@@ -1,0 +1,67 @@
+<%- include('../../partials/head' , { title: 'Cars' }) %>
+<%- include('../../partials/sidebar') %>
+<%- include('../../partials/header') %>
+
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="row align-items-center mb-3">
+            <div class="col-6">
+                <div class="h2">
+                    Cars
+                </div>
+            </div>
+
+            <div class="col-6 text-end">
+                <a class="btn btn-success" href="/admin/cars/add">
+                    +Add
+                </a>
+            </div>
+
+        </div>
+
+        <div class="row cars">
+            <% cars.forEach((car)=> { %>
+                <div class="col-md-6 mb-4 car-<%= car.id %>">
+                    <div class="card">
+                        <img style="height: 400px; object-fit: contain; margin-top: 40px;" src="/cars/<%= car.image %>" class="card-img-top" alt="<%= car.title %>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= car.name %>
+                            </h5>
+                            <% car.rentals.forEach((reservation)=> {%>
+                                <div class="mb-3 reservation-<%=reservation.id%> bg-info rounded-3 text-light p-2">
+                                    <p>Customer: <span><%= reservation.customer.name %></span></p>
+                                    <p>Start Date: <span><%= reservation.start_date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></span> </p>
+                                    <p>End Date: <span><%= reservation.end_date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></span> </p>
+                                    <p>Status: <span><%= reservation.is_delivered %></span></p>
+                                </div>   
+                            <%})%>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">
+                              
+                            </small>
+                            <div class="float-end">
+   
+                                <% if(car.rentals.length){ %>
+                                <a href="/admin/cars/edit/<%= car.id %>"
+                                    class="btn btn-primary me-2">Receive</a>
+                                <button type="button" class="btn btn-sm btn-outline-danger">Extend</button>
+                                <%}else{%>
+                                <a class="btn btn-primary me-2" href="">Book Now</a>    
+                                <%}%>
+                                
+                 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+
+
+    </div>
+</main>
+
+<%- include('../../partials/footer') %>
