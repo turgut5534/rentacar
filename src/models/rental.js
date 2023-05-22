@@ -18,6 +18,14 @@ const Rental = sequelize.define('rental', {
     cost: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    duration: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    is_delivered: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   });
 

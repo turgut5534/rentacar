@@ -7,7 +7,11 @@ const path = require('path')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 const compressImage = require('../middlewares/compressImage')
+const carStatus = require('../utils/carStatus')
+
+const Car = require('../models/car')
 const Rental = require('../models/rental')
+const Brand = require('../models/brand')
 
 router.use(auth)
 
@@ -42,15 +46,21 @@ router.get('/reservations', async(req,res) => {
 
     try{
 
-        const customer = await Customer.findByPk(req.customer.id, {
+        const reservations = await Rental.findAll({
+            where: {
+                customerId: req.customer.id
+            },
             include: [
                 {
-                    model: Rental
+                    model: Car,
+                    include: {
+                        model: Brand
+                    }
                 }
             ]
         })
 
-        res.render('site/views/reservations', {customer})
+        res.render('site/views/reservations', {reservations, carStatus})
 
     } catch(e) {
         console.log(e)
