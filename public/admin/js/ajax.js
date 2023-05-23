@@ -72,6 +72,22 @@ $('body').on('click', '.edit-feature', function(e) {
     
 })
 
+$('body').on('click', '.edit-location', function(e) {
+
+    e.preventDefault()
+
+    const id = $(this).data('id')
+    const title = $(this).data('title')
+    const address = $(this).data('address')
+    const city = $(this).data('city')
+        
+    $('#edit-location-id').val(id)
+    $('#location-title').val(title)
+    $('#location-address').val(address)
+    $('#location-city').val(city)
+    
+})
+
 
 $('body').on('submit','#skill-edit-form', function(e) {
 
@@ -148,6 +164,45 @@ $('body').on('submit','#feature-edit-form', function(e) {
     })
     
 })
+
+$('body').on('submit','#location-edit-form', function(e) {
+
+    e.preventDefault()
+
+    const button = $('.update-location-button')
+
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        beforeSend: function() {
+            button.html('Updating...')
+        },
+        success: function(response) {
+
+            $('.location-name-h5-'+ response.location.id).html(response.location.name)
+      
+        $('#editLocationModal').modal('hide')
+        $('.modal-backdrop').remove();
+        button.html('Update')
+
+        iziToast.success({
+            title: 'OK',
+            message: 'Location updated successfuly!',
+        });
+
+        },
+        error: function(e) {
+            iziToast.error({
+                title: 'Error',
+                message: 'An error occured updating the data',
+            });
+            button.html('Update')
+        }
+    })
+    
+})
+
 
 $('body').on('click', '.delete-data', function(e) {
 
@@ -274,6 +329,56 @@ $('body').on('submit','#feature-save-form', function(e) {
         $('#addFeatureModal').modal('hide')
         $('.modal-backdrop').remove();
         $('#feature-save-form')[0].reset();
+
+        },
+        error: function(e) {
+            console.log(e)
+            iziToast.error({
+                title: 'Error',
+                message: 'An error occured saving the data',
+            });
+            button.html('Save')
+        }
+    })
+    
+})
+
+$('body').on('submit','#location-save-form', function(e) {
+
+    e.preventDefault()
+
+    const button = $('.save-location-button')
+
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        beforeSend: function() {
+            button.html('Saving...')
+        },
+        success: function(data) {
+
+            console.log(data.location.id)
+
+            $('.categories').append(`<div class="col-12 col-md-6 col-lg-4 location-${data.location.id}">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="capitalize card-title location-name-h5-${data.location.id}">
+                        ${data.location.name}
+                    </h5>
+                    <div class="d-flex justify-content-end">
+                        <a href="javascript:;"
+                            class="btn btn-sm btn-outline-secondary me-2 edit-location edit-category-${data.location.id}" data-id="${data.location.id}" data-title="${data.location.name}" data-bs-toggle="modal" data-bs-target="#editLocationModal">Edit</a>
+                        <a href="javascript:;" data-data="location" data-href="/admin/locations/delete/${data.location.id}" data-title="${data.location.name}" data-id="${data.location.id}" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>`)
+
+        button.html('Save')
+        $('#addLocationModal').modal('hide')
+        $('.modal-backdrop').remove();
+        $('#location-save-form')[0].reset();
 
         },
         error: function(e) {

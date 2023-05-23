@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="col-6 text-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addlocationModal">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLocationModal">
                     +Add
                   </button>
             </div>
@@ -29,8 +29,8 @@
                                 </h5>
                                 <div class="d-flex justify-content-end">
                                     <a href="javascript:;"
-                                        class="btn btn-sm btn-outline-secondary me-2 edit-location edit-location-<%= location.id %>" data-id="<%= location.id %>" data-title="<%= location.name %>" data-rate="<%= location.rate %>" data- data-bs-toggle="modal" data-bs-target="#editlocationModal">Edit</a>
-                                    <a href="javascript:;" data-data="location" data-href="/admin/cars/locations/delete/<%= location.id %>" data-title="<%= location.name %>" data-id="<%= location.id %>" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
+                                        class="btn btn-sm btn-outline-secondary me-2 edit-location edit-location-<%= location.id %>" data-address="<%= location.address %>" data-city="<%= location.city %>" data-id="<%= location.id %>" data-title="<%= location.name %>" data-bs-toggle="modal" data-bs-target="#editLocationModal">Edit</a>
+                                    <a href="javascript:;" data-data="location" data-href="/admin/locations/delete/<%= location.id %>" data-title="<%= location.name %>" data-id="<%= location.id %>" class="btn btn-sm btn-outline-danger delete-data">Delete</a>
                                 </div>
                             </div>
                         </div>

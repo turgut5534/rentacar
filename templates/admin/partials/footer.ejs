@@ -131,6 +131,80 @@
     </div>
 </div>
 
+<div class="modal fade" id="addLocationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/admin/locations/save" method="POST" id="location-save-form">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">Name</label>
+                        <input required type="text" name="name" class="form-control" id="feature-title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">Address</label>
+                        <textarea class="form-control" name="address" id="" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">City</label>
+                        <input required type="text" name="city" class="form-control" id="feature-title">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary save-location-button">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/admin/locations/update" method="POST" id="location-edit-form">
+
+                <input id="edit-location-id" type="hidden" name="id" value="">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">Name</label>
+                        <input required type="text" name="name" class="form-control" id="location-title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">Address</label>
+                        <textarea class="form-control" name="address" id="location-address" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputText" class="form-label">City</label>
+                        <input required type="text" name="city" class="form-control" id="location-city">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary update-location-button">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script src="/js/iziToast.min.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

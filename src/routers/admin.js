@@ -20,6 +20,7 @@ const Location = require('../models/location')
 const Feature = require('../models/feature')
 const Rental = require('../models/rental')
 const Customer = require('../models/customer')
+const { loadavg } = require('os')
 
 const uploadDirectory = path.join(__dirname, '../../uploads')
 
@@ -52,6 +53,55 @@ router.get('/locations', async(req,res) => {
 
     } catch(e) {
         console.log(e)
+    }
+
+})
+
+router.post('/locations/save', async(req,res) => {
+
+    try{
+
+        const location = await Location.create(req.body)
+
+        res.status(201).json({location})
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+router.post('/locations/update', async(req,res) => {
+
+    try{
+
+        const location = await Location.findByPk(req.body.id)
+
+        await location.update(req.body)
+
+        res.status(201).json({location})
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
+    }
+
+})
+
+router.delete('/locations/delete/:id', async(req,res) => {
+
+    try{
+
+        const location = await Location.findByPk(req.params.id)
+
+        await location.destroy()
+
+        res.status(200).send()
+
+    } catch(e) {
+        console.log(e)
+        res.status(400).send(e)
     }
 
 })
