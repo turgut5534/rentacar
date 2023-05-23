@@ -282,12 +282,21 @@ router.post('/book/confirm', async(req,res) => {
             return res.redirect('/')
         }
 
+        const hasReservation = await Rental.findOne({
+            where: {
+                customerId: req.customer.id,
+                is_delivered: 0
+            }
+        })
+
+        if(hasReservation) {
+            return res.send('You already have a reservation')
+        }
+
         const total = req.session.totalPrice
         const pickup = req.session.pickup
         const dropoff = req.session.dropoff
         const carId = req.session.carId
-
-        console.log(req.session.pickup_location)
 
         const pickup_location = await Location.findOne({
             where: {

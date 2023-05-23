@@ -243,3 +243,16 @@ $('body').on('click', '.suggestion-li-dropoff', function() {
     $('.location-suggestions').addClass('display-none')
 
 })
+
+$('#book_pick_date').on('change', function() {
+    const pickDate = new Date($(this).val());
+    pickDate.setDate(pickDate.getDate() + 2);
+
+    const month = pickDate.getMonth() + 1;
+    const day = pickDate.getDate();
+    const year = pickDate.getFullYear();
+
+    const offDateValue = `${month}/${day}/${year}`;
+
+    $('#book_off_date').val(offDateValue);
+});
