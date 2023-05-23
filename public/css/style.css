@@ -9946,3 +9946,16 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+.location-suggestions {
+  position: absolute;
+  list-style: none;
+  background-color: #0056b3;
+  z-index: 2;
+  width: 100%;
+  padding: 5px;
+}
+
+.display-none {
+  display: none;
+}

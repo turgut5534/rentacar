@@ -152,9 +152,28 @@ router.get('/pricing', async(req,res) => {
             ]
         })
 
-        console.log(cars[0].reviews[0].rating)
-
         res.render('site/views/pricing', {cars})
+    } catch(e) {
+        console.log(e)
+    }
+
+    
+})
+
+router.post('/bringLocations', async(req,res) => {
+
+    try{
+
+        const locations = await Location.findAll({
+            where: {
+                city: {
+                    [Op.startsWith]: req.body.search
+                }
+            }
+        })
+
+        res.json({locations})
+        
     } catch(e) {
         console.log(e)
     }

@@ -155,3 +155,91 @@ $('#customer-image-input').on('change', function(e){
       });
 
 })
+
+$('#pickUpInput').on('input', function() {
+    const search = $(this).val();
+    const $locationSuggestions = $('.location-suggestions-pickup');
+
+    if (search.length > 0) {
+        $.ajax({
+            type: 'POST',
+            url: '/bringLocations',
+            data: { search: search },
+            success: function(data) {
+                if (data.locations.length) {
+                    $locationSuggestions.removeClass('display-none');
+                    $locationSuggestions.empty(); 
+
+                    data.locations.forEach((location) => {
+                        $locationSuggestions.append(`<li class="suggestion-li">${location.city}</li>`);
+                    });
+                } else {
+                    $locationSuggestions.addClass('display-none');
+                }
+            },
+            error: function() {
+                // Handle error
+            }
+        });
+    } else {
+        $locationSuggestions.addClass('display-none');
+        $locationSuggestions.empty(); // Clear previous suggestions
+    }
+});
+
+$('#dropOffInput').on('input', function() {
+    const search = $(this).val();
+    const $locationSuggestions = $('.location-suggestions-dropoff');
+
+    if (search.length > 0) {
+        $.ajax({
+            type: 'POST',
+            url: '/bringLocations',
+            data: { search: search },
+            success: function(data) {
+                if (data.locations.length) {
+                    $locationSuggestions.removeClass('display-none');
+                    $locationSuggestions.empty(); 
+
+                    data.locations.forEach((location) => {
+                        $locationSuggestions.append(`<li class="suggestion-li-dropoff">${location.city}</li>`);
+                    });
+                } else {
+                    $locationSuggestions.addClass('display-none');
+                }
+            },
+            error: function() {
+                // Handle error
+            }
+        });
+    } else {
+        $locationSuggestions.addClass('display-none');
+        $locationSuggestions.empty(); // Clear previous suggestions
+    }
+});
+
+
+$('body').on('click', '.suggestion-li', function() {
+
+    const value = $(this).html()
+
+    $('#pickUpInput').val(value)
+
+    if($('#dropOffInput').val() == '') {
+        $('#dropOffInput').val(value)
+    }
+  
+
+    $('.location-suggestions').addClass('display-none')
+
+})
+
+$('body').on('click', '.suggestion-li-dropoff', function() {
+
+    const value = $(this).html()
+
+    $('#dropOffInput').val(value)
+
+    $('.location-suggestions').addClass('display-none')
+
+})
